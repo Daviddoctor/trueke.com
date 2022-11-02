@@ -3,12 +3,26 @@
     <div class="col-md-3">
         <div class="card">
             <div class="card-body">
-                <h4 class="card-title">
-                    {{title}} <a href="#"><i class="fas fa-edit"></i></a>
+                <h4 class="card-title d-flex justify-content-between aling-items-center">
+                    {{title}} <a href="/notes/edit/{{_id}}"><i class="fas fa-edit"></i></a>
                 </h4>
                 <p>{{description}}</p>
+                <form action="/notes/delete/{{_id}}?_method=DELETE" method="POST">
+                <input type="hidden" name="_method" value="DELETE"></input>
+                <button class="btn btn-danger btn-block btn-sm" type="submit">
+                    Borrar
+                </button>
+                </form>
             </div>
         </div>
+    </div>
+    {{else}}
+    <div class="card mx-auto">
+        <div class="card-body">
+            <p class="lead">No existen notas creadas aún!...</p>
+            <a href="/notes/add" class="btn btn-success btn-block">Crear nueva nota!</a>
+        </div>
+
     </div>
     {{/each}}
 </div>
