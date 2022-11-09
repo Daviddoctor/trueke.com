@@ -3,9 +3,17 @@ const router= express.Router();
 
 const User = require("../models/Users");
 
+const passport = require("passport");
+
 router.get("/users/signin", (req, res) =>{
     res.render("users/signin");
 });
+
+router.post("/users/signin", passport.authenticate("local", {
+    successRedirect: "/index",
+    failureRedirect: "/users/signin",
+    failureFlash: true
+}));
 
 router.get("/users/signup", (req, res) =>{
     res.render("users/signup");
@@ -40,5 +48,16 @@ router.post("/users/signup", async (req, res) => {
     }
 
 });
+/* Esta función fue corregida para poder hacer Logout*/
+router.get('/users/logout', (req, res, next) => {
+    req.logout(function (err) {
+      if (err) {
+        return next(err);
+      }
+      // if you're using express-flash
+      req.flash('success_msg', 'Sesión Finalizada');
+      res.redirect('/');
+    });
+}); 
 
 module.exports = router; 
