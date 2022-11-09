@@ -26,6 +26,7 @@ router.post("/notes/new-note", isAuthenticated, async (req, res) => {
     /*Esta linea sirve para crear la nota y poderla almacenar*/
   }else{
     const newNote = new Note({title, description});
+    newNote.user = req.user.id;
     await newNote.save();
     req.flash('success_msg', 'Nota agregada satisfactoriamente!');
     res.redirect("/notes");
