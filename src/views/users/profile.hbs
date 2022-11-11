@@ -1,0 +1,20 @@
+<div class="row">
+    <div class="col-6">
+        <h1>User profile {{user.name}} </h1>
+        <hr>
+        <h5>My last orders</h5>
+        <div class="last-orders">
+            {{# each orders }}
+                <div class="order-div">
+                    <ul>
+                        {{# each this.items }} <!-- I created this items field at routes/user.js -->
+                            <li>{{ this.item.title }} | {{ this.quantity }}x | {{ this.price }}</li>
+                        {{/ each}}
+                    </ul>
+                    <strong>Total Price: ${{ this.cart.totalPrice }}</strong>
+                </div>
+                <hr>
+            {{/ each }}
+        </div>
+    </div>
+</div>

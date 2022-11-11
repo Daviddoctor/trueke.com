@@ -1,12 +1,49 @@
+/* const csrf = require("csurf");*/
 const express = require("express");
-const router= express.Router();
+const passport = require("passport");
+const { check } = require("express-validator");
+const orderService = require("../services/OrderService.js");
+const Cart = require("../models/cart");
 
 const User = require("../models/Users");
 
-const passport = require("passport");
+const { isAuthenticated } = require("../helpers/auth");
+const router= express.Router();
+/* router.use(csrf());*/
 
-router.get("/users/signin", (req, res) =>{
-    res.render("users/signin");
+router.get("/users/profile", isAuthenticated, async (req, res, next) => {
+    try {
+        orders = await orderService.getOrdersByUser({ user: req.user });
+        res.render("user/profile", { orders });
+
+    }catch (error) {
+        console.log("Error: " + error);
+        return next(error);
+    }
+});
+
+/* Esta función fue corregida para poder hacer Logout*/
+router.get('/users/logout', (req, res, next) => {
+    req.logout(function (err) {
+      if (err) {
+        return next(err);
+      }
+      // if you're using express-flash
+      req.flash('success_msg', 'Sesión Finalizada');
+      res.redirect('/');
+    });
+}); 
+
+// Creating our own middleware: only allow not-logged-in users to access the
+// following routes.
+router.use("/", isNotAuthenticated, (req, res, next) => {
+    next();
+})
+
+//SIGNIN
+router.get("/users/signin", (req, res, next) =>{
+    const messages = request.flash("error");
+    return res.render("users/signin", { csrfToken: request.csrfToken(), messages });
 });
 
 router.post("/users/signin", passport.authenticate("local", {
@@ -15,6 +52,8 @@ router.post("/users/signin", passport.authenticate("local", {
     failureFlash: true
 }));
 
+
+//SIGNUP
 router.get("/users/signup", (req, res) =>{
     res.render("users/signup");
 });
@@ -48,16 +87,13 @@ router.post("/users/signup", async (req, res) => {
     }
 
 });
-/* Esta función fue corregida para poder hacer Logout*/
-router.get('/users/logout', (req, res, next) => {
-    req.logout(function (err) {
-      if (err) {
-        return next(err);
-      }
-      // if you're using express-flash
-      req.flash('success_msg', 'Sesión Finalizada');
-      res.redirect('/');
-    });
-}); 
+
 
 module.exports = router; 
+
+function isNotAuthenticated(req, res, next) {
+    if (!req.isAuthenticated()) {
+        return next();
+    }
+    res.redirect("/");
+}

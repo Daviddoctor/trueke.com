@@ -1,0 +1,37 @@
+<script src="https://js.stripe.com/v3/"></script>
+
+<form action="/checkout" method="post" id="payment-form">
+  <div class="form-row">
+
+    <!-- Name & address errors-->
+    <div id="success" class="alert alert-danger" {{# if noError }} hidden {{/ if }}>
+        {{ errorMessage }}
+    </div>
+
+    <!-- Name -->
+    <div class="form-group">
+        <label for="name">Name</label>
+        <input type="text" name="name">
+    </div>
+
+    <!-- Address -->
+    <div class="form-group">
+        <label for="address">Address</label>
+        <input type="text" name="address">
+    </div>
+
+    <!-- A Stripe Element will be inserted in the div '.card-element' below. -->
+    <label for="card-element">
+      Credit or debit card
+    </label>
+    <div id="card-element"></div>
+
+    <!-- Used to display stripe form errors. -->
+    <div id="card-errors" role="alert"></div>
+    <input type="hidden" name="_csrf" value="{{ csrfToken }}"> <!-- {{ csrfToken }} -->
+  </div>
+
+  <button>Submit Payment</button>
+</form>
+
+<script src="/javascripts/checkout.js"></script>
