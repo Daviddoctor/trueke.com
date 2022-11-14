@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon src/index.js"
+    "dev": "nodemon ./bin/www"
   },
   "keywords": [],
   "author": "",
@@ -14,7 +14,8 @@
     "bcrypt-nodejs": "^0.0.3",
     "bcryptjs": "^2.4.3",
     "connect-flash": "^0.1.1",
-    "connect-mongo": "^4.6.0",
+    "connect-mongo": "^3.2.0",
+    "connect-mongostore": "^0.1.4",
     "cookie-parser": "^1.4.6",
     "csrf": "^3.1.0",
     "csurf": "^1.11.0",
