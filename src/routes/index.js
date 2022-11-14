@@ -1,22 +1,23 @@
-/*const csrf = require("csrf");*/
+const csrf = require("csurf");
 const express = require('express');
 const productService = require("../services/ProductService");
 const orderService = require("../services/OrderService.js");
 const Cart = require("../models/cart");
 
 const { isAuthenticated } = require("../helpers/auth");
+
 const router= express.Router();
-/*router.use(csrf());*/
+router.use(csrf());
 
 router.get('/', async (req, res, next) => {
     console.log(req.user);
-    const successMessage = req.flash("success")[0];
+    const successMessage = req.flash("success")[10];
     const products = await productService.getAll();
     return res.render('shop/index', { title: 'Express', products, successMessage,
                                                   noMessages: !successMessage });
 });
 
-router.get("/add-to-cart/:id", isAuthenticated, async (req, res, next) => {
+router.get("/add-to-cart/:id", async (req, res, next) => {
     const productId = req.params.id;
     const cart = new Cart(req.session.cart ? req.session.cart : {});
     try {
@@ -37,7 +38,7 @@ router.get("/add-to-cart/:id", isAuthenticated, async (req, res, next) => {
     }
 });
 
-router.get("/reduce/:id", isAuthenticated, async (req, res, next) => {
+router.get("/reduce/:id", async (req, res, next) => {
     try {
         const productId = req.params.id;
         const cart = new Cart(req.session.cart ? req.session.cart : {});
@@ -50,7 +51,7 @@ router.get("/reduce/:id", isAuthenticated, async (req, res, next) => {
     }
 });
 
-router.get("/remove/:id", isAuthenticated, async (req, res, next) => {
+router.get("/remove/:id", async (req, res, next) => {
     try {
         const productId = req.params.id;
         const cart = new Cart(req.session.cart ? req.session.cart : {});
@@ -63,7 +64,7 @@ router.get("/remove/:id", isAuthenticated, async (req, res, next) => {
     }
 });
 
-router.get("/shopping-cart", isAuthenticated, (req, res, next) => {
+router.get("/shopping-cart", (req, res, next) => {
     if (!req.session.cart) {
         console.log("The user does not have a shopping cart yet...")
         return res.render("shop/cart", { products: null });
@@ -75,7 +76,7 @@ router.get("/shopping-cart", isAuthenticated, (req, res, next) => {
 });
 
 /* CHECKOUT */
-router.get("/checkout", isAuthenticated, (req, res, next) => {
+router.get("/shop/checkout", isAuthenticated, (req, res, next) => {
     if (!req.session.cart) {
         res.redirect("/shopping-cart");
     }
@@ -140,12 +141,14 @@ router.post("/checkout", isAuthenticated, (req, res, next) => {
     }
 });
 
+module.exports = router;
+
 
 /*______________________________________________________________*/
 
 /*router.get("/",(req, res)=>{
     res.render('users/profile');
-})*/
+})
 
 router.get('/index', (req, res) =>{
     res.render('index');
@@ -153,7 +156,4 @@ router.get('/index', (req, res) =>{
 
 router.get('/about', (req, res) =>{
     res.render('about');
-});
-
-
-module.exports = router;
+});*/

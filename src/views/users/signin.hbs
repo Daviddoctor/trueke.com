@@ -3,23 +3,34 @@
         <div class="card mt-4 text-center">
             <div>
                 <div class="card-header">
-                <h1>Account Login</h1>
-                <img src="/img/trueKe_logo.png" class="rounded-circle mx-auto d-block m-4 logo" alt="logo">
-                <div class="card-body">
-                    <form action="/users/signin" method="POST">
-                        <div class="form-group">
-                            <input type="email" class="form-control" name="email" placeholder="Email" autofocus>
-                        </div>
-                        <div class="form-group">
-                            <input type="password" class="form-control" name="password" placeholder="Contraseña">
-                        </div>
-                        <div class="form-group">
-                            <button type="submit" class="btn btn-primary d-grid gap-2 col-6 mx-auto">
-                                Iniciar Sesión
-                            </button>
-                        </div> 
-                    </form>
-                </div>
+                    <h1>Account Login</h1>
+                    {{#if messages }}
+                    {{#each messages}}
+                    <div class="alert alert-danger">
+                        <p>{{this}}</p>
+                    </div>
+                    {{/each}}
+                    {{/if}}
+                    <img src="/img/trueKe_logo.png" class="rounded-circle mx-auto d-block m-4 logo" alt="logo">
+                    <div class="card-body">
+                        <form action="/users/signin" method="POST">
+                            <div class="form-group">
+                                <input type="email" class="form-control" id="email" name="email" placeholder="Email" autofocus>
+                            </div>
+                            <div class="form-group">
+                                <input type="password" 
+                                id="password" class="form-control" name="password" placeholder="Contraseña">
+                            </div>
+                            <!-- The form won't be sent if the line below is comented (csrf protection) -->
+                            <input type="hidden" name="_csrf" value="{{csrfToken}}"><!-- {{ csrfToken }} -->
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary d-grid gap-2 col-6 mx-auto">
+                                    SignIn
+                                </button>
+                            </div>
+                        </form>
+                        <strong>Don't have an account at X yet? <a href="/users/signup">Create one for free</a></strong>
+                    </div>
                 </div>
             </div>
         </div>

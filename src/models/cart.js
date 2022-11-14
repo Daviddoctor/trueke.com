@@ -4,8 +4,8 @@ module.exports = function Cart(oldCart) {
   this.totalPrice = oldCart.totalPrice || 0;
 
   this.add = (item) => {
-      var id = item.id;
-      var storedItem = this.items[id];
+      const id = item.id;
+      const storedItem = this.items[id];
       if (!storedItem) {
           // First time this item is being added to the cart.
           storedItem = this.items[id] = { item: item, quantity: 1, price: 0 };
@@ -42,8 +42,8 @@ module.exports = function Cart(oldCart) {
   }
 
   this.objectToArray = () => {
-      var arr = [];
-      for (var key in this.items) {
+      const arr = [];
+      for (const key in this.items) {
           arr.push(this.items[key]);
       }
       return arr;

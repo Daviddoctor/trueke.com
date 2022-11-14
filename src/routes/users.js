@@ -1,20 +1,19 @@
-/* const csrf = require("csurf");*/
+const csrf = require("csurf");
 const express = require("express");
 const passport = require("passport");
 const { check } = require("express-validator");
 const orderService = require("../services/OrderService.js");
 const Cart = require("../models/cart");
 
-const User = require("../models/Users");
-
 const { isAuthenticated } = require("../helpers/auth");
+
 const router= express.Router();
-/* router.use(csrf());*/
+router.use(csrf());
 
 router.get("/users/profile", isAuthenticated, async (req, res, next) => {
     try {
-        orders = await orderService.getOrdersByUser({ user: req.user });
-        res.render("user/profile", { orders });
+        orders = await orderService.getOrdersByUser({user: req.user });
+        res.render("users/profile", { orders });
 
     }catch (error) {
         console.log("Error: " + error);
@@ -23,10 +22,10 @@ router.get("/users/profile", isAuthenticated, async (req, res, next) => {
 });
 
 /* Esta función fue corregida para poder hacer Logout*/
-router.get('/users/logout', (req, res, next) => {
-    req.logout(function (err) {
-      if (err) {
-        return next(err);
+router.get('/users/logout', isAuthenticated, (req, res, next) => {
+    req.logout(function (error) {
+      if (error) {
+        return next(error);
       }
       // if you're using express-flash
       req.flash('success_msg', 'Sesión Finalizada');
@@ -40,22 +39,73 @@ router.use("/", isNotAuthenticated, (req, res, next) => {
     next();
 })
 
-//SIGNIN
-router.get("/users/signin", (req, res, next) =>{
-    const messages = request.flash("error");
-    return res.render("users/signin", { csrfToken: request.csrfToken(), messages });
+
+router.get("/users/signup", (req, res, next) => {
+    // Extracts any flash messages on the request and store under 'error.'
+    // Although in the second error in the passport config file, I wrote
+    // {message: ...}, passport stores that flash message in the variable called
+    // error.
+    const messages = req.flash("error");
+    return res.render("users/signup", { csrfToken: req.csrfToken(), messages });
 });
 
-router.post("/users/signin", passport.authenticate("local", {
-    successRedirect: "/",
+router.post("/users/signup", [
+    check("email").isEmail().withMessage("Invalid email"),
+    check("password").isLength({ min: 4 }).withMessage("Invalid password")
+], passport.authenticate("local.signup", {
+    successRedirect: "/users/profile",
+    failureRedirect: "/users/signup",
+    failureFlash: true // Shows the message I set at passport.js
+}), (req, res, next) => {
+    // Only gets executed if it doesn't fail.
+    if(req.session.oldURL) {
+        const oldURL = req.session.oldURL;
+        req.session.oldURL = null;
+        res.redirect(oldURL);
+    }else {
+        res.redirect("/users/profile");
+    }
+});
+
+//SIGNIN
+router.get("/users/signin", (req, res, next) =>{
+    const messages = req.flash("error");
+    return res.render("users/signin", { csrfToken: req.csrfToken(), messages });
+});
+
+router.post("/users/signin", [
+    check("email").isEmail().withMessage("Invalid email"),
+    check("password").isLength({ min: 4 }).withMessage("Invalid password")
+], passport.authenticate("local.signin", {
+    successRedirect: "/users/profile",
     failureRedirect: "/users/signin",
     failureFlash: true
-}));
+})); (req, res, next) => {
+    // Only gets executed if it doesn't fail.
+    if(req.session.oldURL) {
+        const oldURL = req.session.oldURL;
+        req.session.oldURL = null;
+        res.redirect(req.session.oldURL);
+    }else {
+        res.redirect("/users/profile");
+    }
+};
 
+module.exports = router; 
 
-//SIGNUP
-router.get("/users/signup", (req, res) =>{
-    res.render("users/signup");
+function isNotAuthenticated(req, res, next) {
+    if (!req.isAuthenticated()) {
+        return next();
+    }
+    res.redirect("/");
+}
+
+/*//SIGNUP -- PRIMERA VERSIÓN --
+const User = require("../models/Users");
+
+router.get("/users/signup", (req, res, next) =>{
+    const messages = req.flash("error");
+    return res.render("users/signup", { csrfToken: request.csrfToken(), messages });
 });
 
 router.post("/users/signup", async (req, res) => {
@@ -86,14 +136,4 @@ router.post("/users/signup", async (req, res) => {
        res.redirect("/users/signin");
     }
 
-});
-
-
-module.exports = router; 
-
-function isNotAuthenticated(req, res, next) {
-    if (!req.isAuthenticated()) {
-        return next();
-    }
-    res.redirect("/");
-}
+});*/

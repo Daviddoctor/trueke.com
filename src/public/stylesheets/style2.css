@@ -1,0 +1,161 @@
+/**
+ * Navbar
+ */
+ * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+nav {
+    display: flex; /* So all the items become next to each other (E.g.: the ul comes next to the logo div). */
+    justify-content: space-around;
+    align-items: center; /* Center vertically */
+    min-height: 8vh;
+    background-color: #0f2c59;
+    font-family: 'Muli', sans-serif;
+}
+
+.logo {
+    color: rgb(226, 226, 226);
+    text-transform: uppercase;
+    letter-spacing: 5px; /* Pretty cool. */
+    font-size: 20px;
+}
+
+.nav-links {
+    display: flex;
+    justify-content: space-around; /* Here, I need to increase the width so that the items have space to have space around. */
+    width: 30%;
+}
+
+.nav-links li {
+    list-style: none;
+}
+
+.nav-links a {
+    color: rgb(226, 226, 226);
+    text-decoration: none;
+    letter-spacing: 3px;
+    font-size: 13px;
+}
+
+.burger {
+    display: none; /* Should display only on mobile  */
+    cursor: pointer;
+}
+
+.burger div {
+    width: 25px;
+    height: 3px;
+    background-color: rgb(226, 226, 226);
+    margin: 5px;
+    transition: all 0.3s ease;
+}
+
+@media screen and (max-width: 1024px) {
+    /* Tablets */
+    .nav-links {
+        width: 50%;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    /* Mobile */
+    /* body {
+        display: none;
+    } */
+
+    body {
+        overflow-x: hidden;
+    }
+
+    .nav-links {
+        position: absolute; /* The ul won't care about the div on its left side,
+        it will stand on top of it.*/
+        right: 0px;
+        height: 92vh;
+        top: 8vh; /* The ul will be right under the navbar. */
+        background-color: #0f2c59;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 50%;
+        transform: translateX(100%); /* The ul will be totally off the screen to the right.
+        To fit it, I will use overflow-x hidden on the body so that we can't scroll anymore
+        to the side of the screen to see the ul. */
+        transition: transform 0.5s ease-in;
+    }
+
+    .nav-links li {
+        opacity: 0;
+    }
+
+    .burger {
+        display: block;
+    }
+}
+
+.nav-active {
+    transform: translateX(0%);
+}
+
+/* Making animations */
+@keyframes navLinkFade {
+    from {
+        opacity: 0;
+        transform: translateX(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0px);
+    }
+}
+
+.toggle .line1 {
+    transform: rotate(-45deg) translate(-5px, 6px);
+}
+
+.toggle .line2 {
+    opacity: 0;
+}
+
+.toggle .line3 {
+    transform: rotate(45deg) translate(-5px, 6px);
+}
+
+/**
+ * The CSS shown here will not be introduced in the Quickstart guide, but shows
+ * how you can use CSS to style your Element's container.
+ */
+.StripeElement {
+  box-sizing: border-box;
+
+  height: 40px;
+
+  padding: 10px 12px;
+
+  border: 1px solid transparent;
+  border-radius: 4px;
+  background-color: white;
+
+  box-shadow: 0 1px 3px 0 #e6ebf1;
+  -webkit-transition: box-shadow 150ms ease;
+  transition: box-shadow 150ms ease;
+}
+
+.StripeElement--focus {
+  box-shadow: 0 1px 3px 0 #cfd7df;
+}
+
+.StripeElement--invalid {
+  border-color: #fa755a;
+}
+
+.StripeElement--webkit-autofill {
+  background-color: #fefde5 !important;
+}
+
+.form-row {
+    display: inherit;
+}

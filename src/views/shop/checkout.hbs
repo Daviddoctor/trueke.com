@@ -4,8 +4,8 @@
   <div class="form-row">
 
     <!-- Name & address errors-->
-    <div id="success" class="alert alert-danger" {{# if noError }} hidden {{/ if }}>
-        {{ errorMessage }}
+    <div id="success" class="alert alert-danger" {{#if noError}} hidden {{/if}}>
+        {{errorMessage}}
     </div>
 
     <!-- Name -->
@@ -28,7 +28,7 @@
 
     <!-- Used to display stripe form errors. -->
     <div id="card-errors" role="alert"></div>
-    <input type="hidden" name="_csrf" value="{{ csrfToken }}"> <!-- {{ csrfToken }} -->
+    <input type="hidden" name="_csrf" value="{{csrfToken}}"> <!-- {{ csrfToken }} -->
   </div>
 
   <button>Submit Payment</button>
