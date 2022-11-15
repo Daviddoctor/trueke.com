@@ -16,13 +16,21 @@ const ConnectMongo = require('connect-mongo')(expressSession);//.default;
 const mongoose = require('mongoose');
 // const expressValidator = require("express-validator");
 
+//www
+const debug = require('debug')('cart-proj:server');
+const http = require('http');
+//const mongoose = require("mongoose");
+const config = require("./config/index");
+///www
+
 //Initiliazations: Inicializaciones
 const app = express();
 require('./database');
 require("./config/passport");
 
 //Settings: Configuración
-app.set('port', process.env.PORT || 3000);
+const port = normalizePort(process.env.PORT || '3000');
+app.set('port', port);
 app.set('views', path.join(__dirname, 'views'));
 // view engine setup
 app.engine('.hbs', exphbs.engine({
@@ -37,7 +45,7 @@ app.set('view engine', '.hbs');
 //Middlewares: Todas las funciones ejecutadas que van al servidor
 app.use(logger('dev'));
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(methodOverride('_method'));
 app.use(express.static(path.join(__dirname, '/public')));
@@ -48,7 +56,7 @@ app.use(expressSession({
     store: new ConnectMongo({ mongooseConnection: mongoose.connection }),
     //store: MongoStore.create({ mongoUrl: process.env.MONGO_URI }),
     //store: new MongoStore({ mongooseConnection: mongoose.connection }),
-    //cookie: { maxAge: 180 * 60 * 1000 } // How long sessions should last until they expire (in ms).
+    cookie: { maxAge: 180 * 60 * 1000 } // How long sessions should last until they expire (in ms).
 }))
 app.use(passport.initialize()); // I'll only be using the local strategy (there are others
 // like using facebook, google, etc...)
@@ -80,9 +88,9 @@ app.use(require('./routes/notes'));
 app.use(require('./routes/users'));
 
 //Server is listenning: Inciar el servidor
-app.listen(app.get('port'), () => {
+/* app.listen(app.get('port'), () => {
   console.log('server on port', app.get('port'));
-});
+});*/
 
 // Dealing with the favicon.ico. (ERRORES)
 app.get("/favicon.ico", (req, res, next) => {
@@ -105,5 +113,98 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
+//www
+/**
+ * Connecting to mongodb using mongoose.
+ */
+ /*mongoose.connect(config.mongodb.dsn, { useNewUrlParser: true })
+ .then(() => {
+     console.log("Successfully connected to MongoDB through Mongoose.");
+ })
+ .catch((error) => {
+     console.log("Error when connecting to MongoDB through Mongoose: " + error);
+ });*/
+
+/**
+* Get port from environment and store in Express.
+*/
+
+// const port = normalizePort(process.env.PORT || '3000');
+// app.set('port', port);
+
+/**
+* Create HTTP server.
+*/
+
+const server = http.createServer(app);
+
+/**
+* Listen on provided port, on all network interfaces.
+*/
+
+server.listen(port);
+server.on('error', onError);
+server.on('listening', onListening);
+
+/**
+* Normalize a port into a number, string, or false.
+*/
+
+function normalizePort(val) {
+const port = parseInt(val, 10);
+
+if (isNaN(port)) {
+ // named pipe
+ return val;
+}
+
+if (port >= 3000) {
+ // port number
+ return port;
+}
+
+return false;
+}
+
+/**
+* Event listener for HTTP server "error" event.
+*/
+
+function onError(error) {
+if (error.syscall !== 'listen') {
+ throw error;
+}
+
+const bind = typeof port === 'string'
+ ? 'Pipe ' + port
+ : 'Port ' + port;
+
+// handle specific listen errors with friendly messages
+switch (error.code) {
+ case 'EACCES':
+   console.error(bind + ' requires elevated privileges');
+   process.exit(1);
+ case 'EADDRINUSE':
+   console.error(bind + ' is already in use');
+   process.exit(1);
+ default:
+   throw error;
+}
+}
+
+/**
+* Event listener for HTTP server "listening" event.
+*/
+
+function onListening() {
+const addr = server.address();
+const bind = typeof addr === 'string'
+ ? 'pipe ' + addr
+ : 'port ' + addr.port;
+debug('Listening on ' + bind);
+}
+
+///www
 
 module.exports = app;
