@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
+const { Schema } = mongoose;
 
-const ProductSchema = mongoose.Schema({
+const ProductSchema = new Schema({
     imagePath: { type: String, required: true },
     title: { type: String, required: true },
     description: { type: String, required: true },

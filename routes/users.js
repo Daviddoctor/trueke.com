@@ -5,6 +5,7 @@ const { check } = require("express-validator");
 const orderService = require("../services/OrderService.js");
 const Cart = require("../models/cart");
 
+
 const { isAuthenticated } = require("../helpers/auth");
 
 const router= express.Router();
@@ -55,7 +56,7 @@ router.post("/users/signup", async (req, res) => {
     if(errors.length > 0){
         res.render("users/signup", {errors, name, surname, email, password, confirm_password});
     }
-    /*else{
+    else{
        const emailUser = await User.findOne({email: email});
         if(emailUser){
             req.flash("error_msg", "El email registrado se encuentra en uso");
@@ -66,7 +67,7 @@ router.post("/users/signup", async (req, res) => {
        await newUser.save();
        req.flash("success_msg", "Usuario Registrado");
        res.redirect("users/signin");
-    } */
+    } 
 
 });
 
@@ -133,7 +134,6 @@ function isNotAuthenticated(req, res, next) {
 }
 
 /*//SIGNUP -- PRIMERA VERSIÓN --
-const User = require("../models/Users");
 
 router.get("/users/signup", (req, res, next) =>{
     const messages = req.flash("error");

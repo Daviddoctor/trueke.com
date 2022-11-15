@@ -1,12 +1,13 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
 const bcrypt = require("bcryptjs");
+const cart = require("./cart");
 
 const UserSchema = new Schema({
     name: {type: String, required: true},
     email: {type: String, required: true},
     password: {type: String, required: true},
-    date: {type: Date, default: Date.new}
+    date: {type: Date, default: Date.new} 
 });
 
 UserSchema.methods.encryptPassword = async (password) => {

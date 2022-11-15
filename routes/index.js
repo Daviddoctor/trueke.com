@@ -67,12 +67,12 @@ router.get("/remove/:id", async (req, res, next) => {
 router.get("/shopping-cart", (req, res, next) => {
     if (!req.session.cart) {
         console.log("The user does not have a shopping cart yet...")
-        return res.render("shop/cart", { products: null });
+        return res.render("/shop/cart", { products: null });
     }
     console.log("The user already has a shopping cart. Retrieving it...");
     const cart = new Cart(req.session.cart); // I think I don't need to create
     // another cart here...
-    return res.render("shop/cart", { products: cart.objectToArray(), totalPrice: cart.totalPrice });
+    return res.render("/shop/cart", { products: cart.objectToArray(), totalPrice: cart.totalPrice });
 });
 
 /* CHECKOUT */
