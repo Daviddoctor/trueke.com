@@ -10,7 +10,7 @@ function createOrder(query) {
 function getOrdersByUser(query) {
     OrderModel.find(query, (error, orders) => {
         if (error) { throw error; }
-        const cart = cart;
+        var cart;
         orders.forEach((order) => {
             cart = new Cart(order.cart);
             order.items = cart.objectToArray(); // Adding '.items' on the fly...

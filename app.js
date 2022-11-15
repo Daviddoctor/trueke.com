@@ -60,7 +60,7 @@ app.use(connectFlash()); // Uses sessions and needs the sessions lib above to be
 // on whether or not the user is logged in.
 app.use((req, res, next) => {
     // Adding a 'login' var (like a context).
-    res.locals.login = request.isAuthenticated()
+    res.locals.login = req.isAuthenticated()
     res.locals.session = req.session;
     next();
 });
