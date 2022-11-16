@@ -1,5 +1,5 @@
 module.exports = function Cart(oldCart) {
-  this.items = oldCart.items || {}; // 'items' is an object {}, NOT a simple arr.
+  this.items = oldCart.items || {}; // 'items' es un objeto {}, NO un simple arr.
   this.totalNumberOfItems = oldCart.totalNumberOfItems || 0;
   this.totalPrice = oldCart.totalPrice || 0;
 
@@ -7,13 +7,13 @@ module.exports = function Cart(oldCart) {
       const id = item.id;
       const storedItem = this.items[id];
       if (!storedItem) {
-          // First time this item is being added to the cart.
+          // Es la primera vez que se añade este artículo a la cesta.
           storedItem = this.items[id] = { item: item, quantity: 1, price: 0 };
           storedItem.price = item.price * storedItem.quantity;
           this.totalNumberOfItems++;
           this.totalPrice += storedItem.price;
       }else {
-          // Group items.
+          // Agrupar elementos.
           this.totalPrice -= this.items[item.id].price;
           storedItem.quantity++;
           storedItem.price = item.price * storedItem.quantity;
@@ -28,9 +28,9 @@ module.exports = function Cart(oldCart) {
       this.totalNumberOfItems--;
       this.totalPrice -= this.items[itemId].item.price;
 
-      // Important so that the user cannot keep removing 1 unit from an item in the cart...
+      // Importante para que el usuario no pueda seguir quitando 1 unidad de un artículo del carrito...
       if (this.items[itemId].quantity <= 0) {
-          // Removes item from the cart obj.
+          // Elimina el artículo del carrito obj.
           delete this.items[itemId];
       }
   };
@@ -50,5 +50,5 @@ module.exports = function Cart(oldCart) {
   };
 };
 /*
-Cart JSON structure example for your reference:
+Ejemplo de estructura JSON del carro para su referencia:
 */

@@ -21,6 +21,14 @@ const debug = require('debug')('cart-proj:server');
 const http = require('http');
 //const mongoose = require("mongoose");
 const config = require("./config/index");
+
+mongoose.connect(config.mongodb.dsn, { useNewUrlParser: true })
+    .then(() => {
+        console.log("Successfully connected to MongoDB through Mongoose.");
+    })
+    .catch((error) => {
+        console.log("Error when connecting to MongoDB through Mongoose: " + error);
+    });
 ///www
 
 //Initiliazations: Inicializaciones

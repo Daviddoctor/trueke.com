@@ -6,7 +6,7 @@ const Cart = require("../models/cart");
 
 const { isAuthenticated } = require("../helpers/auth");
 
-const router= express.Router();
+const router = express.Router();
 router.use(csrf());
 
 router.get('/', async (req, res, next) => {

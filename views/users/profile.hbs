@@ -4,10 +4,10 @@
         <hr>
         <h5>My last orders</h5>
         <div class="last-orders">
-            {{#each orders}}
+           {{#each orders}}
                 <div class="order-div">
                     <ul>
-                        {{#each this.items}} <!-- I created this items field at routes/user.js -->
+                        <{{#each this.items}} <!-- I created this items field at routes/ user.js -->
                             <li>{{this.item.title}} | {{this.quantity}}x | {{this.price}}</li>
                         {{/each}}
                     </ul>

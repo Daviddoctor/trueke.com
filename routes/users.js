@@ -4,7 +4,7 @@ const passport = require("passport");
 const { check } = require("express-validator");
 const orderService = require("../services/OrderService.js");
 const Cart = require("../models/cart");
-
+const User = require("../models/Users");
 
 const { isAuthenticated } = require("../helpers/auth");
 
@@ -14,7 +14,7 @@ router.use(csrf());
 router.get("/users/profile", isAuthenticated, async (req, res, next) => {
     try {
         orders = await orderService.getOrdersByUser({user: req.user });
-        res.render("users/profile", { orders });
+        res.render("users/profile", {orders});
 
     }catch (error) {
         console.log("Error: " + error);
@@ -118,7 +118,7 @@ router.post("/users/signin", [
     if(req.session.oldURL) {
         const oldURL = req.session.oldURL;
         req.session.oldURL = null;
-        res.redirect(req.session.oldURL);
+        res.redirect(oldURL);
     }else {
         res.redirect("/users/profile");
     }

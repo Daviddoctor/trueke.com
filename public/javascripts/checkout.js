@@ -1,10 +1,10 @@
-// Creating a Stripe client instance.
+// Creación de una instancia de cliente de Stripe.
 const stripe = Stripe("MY_PUBLIC_KEY");
 
-// Creating an instance of Elements.
+// Creación de una instancia de Elementos.
 const elements = stripe.elements();
 
-// Customizing the credit/debit card field.
+// Personalización del campo de la tarjeta de crédito/débito.
 const style = {
   base: {
     color: "#32325d",
@@ -21,13 +21,13 @@ const style = {
   }
 };
 
-// Creating an instance of the card Element.
+// Creación de una instancia de la tarjeta Elemento.
 const card = elements.create("card", {style: style});
 
-// Adding an instance of the card Element into the `card-element` <div>.
+// Añadir una instancia del elemento tarjeta en el <div> `card-element`.
 card.mount("#card-element");
 
-// Handling real-time validation errors from the card Element.
+// Tratamiento de los errores de validación en tiempo real de la tarjeta Element.
 card.addEventListener("change", function(event) {
   const displayError = document.getElementById("card-errors");
   if (event.error) {
@@ -37,26 +37,26 @@ card.addEventListener("change", function(event) {
   }
 });
 
-// Handling form submission.
+// Gestión del envío de formularios.
 const form = document.getElementById("payment-form");
 form.addEventListener("submit", function(event) {
   event.preventDefault();
 
   stripe.createToken(card).then(function(result) {
     if (result.error) {
-      // Inform the user if there was an error.
+      // Informar al usuario si hubo un error.
       const errorElement = document.getElementById("card-errors");
       errorElement.textContent = result.error.message;
     } else {
-      // Send the token to my localhost server.
+      // Enviar el token a mi servidor localhost.
       stripeTokenHandler(result.token);
     }
   });
 });
 
-// Submitting the form with the stripe token ID gotten from the Stripe server.
+// Enviar el formulario con el ID del token de Stripe obtenido del servidor de Stripe.
 function stripeTokenHandler(token) {
-  // Insert the token ID into the form so it gets submitted to the server.
+  // Inserte el ID del token en el formulario para que se envíe al servidor.
   const form = document.getElementById("payment-form");
   const hiddenInput = document.createElement("input");
   hiddenInput.setAttribute("type", "hidden");
@@ -64,6 +64,6 @@ function stripeTokenHandler(token) {
   hiddenInput.setAttribute("value", token.id);
   form.appendChild(hiddenInput);
 
-  // Submit the form
+  // Envíe el formulario
   form.submit();
 }

@@ -5,9 +5,9 @@ const navSlide = () => {
 
     burger.addEventListener("click", () => {
         // Nav toggler.
-        nav.classList.toggle("nav-active"); // toggle basically means on-off.
+        nav.classList.toggle("nav-active"); // toggle significa básicamente on-off.
 
-        // Animating links.
+        // Animación de enlaces.
         navLinks.forEach((link, index) => {
             link.style.animation = `navLinkFade 0.5s ease forwards ${index / 7 + 1.5}s`;
         });
