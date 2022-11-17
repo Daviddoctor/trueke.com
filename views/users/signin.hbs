@@ -22,7 +22,7 @@
                                 id="password" class="form-control" name="password" placeholder="Contraseña">
                             </div>
                             <!-- The form won't be sent if the line below is comented (csrf protection) -->
-                            <input type="hidden" name="_csrf" value="{{csrfToken}}"><!-- {{ csrfToken }} -->
+                            <input type="hidden" name="_csrf" value="<%= csrfToken %>"><!-- {{ csrfToken }} -->
                             <div class="form-group">
                                 <button type="submit" class="btn btn-primary d-grid gap-2 col-6 mx-auto">
                                     SignIn
